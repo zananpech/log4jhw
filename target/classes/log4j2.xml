@@ -1,0 +1,55 @@
+<Configuration status="debug">
+    <Properties>
+        <Property name="LOG_PATTERN">%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Property>
+    </Properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%X %highlight{${LOG_PATTERN}}"/>
+        </Console>
+
+        <RollingFile name="RollingFile1" fileName="logs/assertationMarker.log"
+                     filePattern="logs/app-%d{MM-dd-yyyy}.log.gz">
+            <MarkerFilter marker="assertation" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout>
+                <pattern>%X %d %p %c{1.} [%t] %m%n</pattern>
+            </PatternLayout>
+            <TimeBasedTriggeringPolicy />
+        </RollingFile>
+        <RollingFile name="RollingFile2" fileName="logs/gibberishMarker.log"
+                     filePattern="logs/app-%d{MM-dd-yyyy}.log.gz">
+            <MarkerFilter marker="gibberish" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout>
+                <pattern>%X %d %p %c{1.} [%t] %m%n</pattern>
+            </PatternLayout>
+            <TimeBasedTriggeringPolicy />
+        </RollingFile>
+        <RollingFile name="RollingFile3" fileName="logs/no_marker.log" filePattern="logs/app-%d{MM-dd-yyyy}.log.gz">
+            <NoMarkerFilter onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="%X %d %p %c{1.} [%t] %m%n"/>
+            <TimeBasedTriggeringPolicy />
+        </RollingFile>
+        <RollingFile name="RollingFile4_Curfew" fileName="logs/curfew.log"
+                     filePattern="logs/app-%d{MM-dd-yyyy}.log.gz">
+            <TimeFilter start="20:00:00" end="05:00:00" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout>
+                <pattern>%X %d %p %c{1.} [%t] %m%n</pattern>
+            </PatternLayout>
+            <TimeBasedTriggeringPolicy />
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+
+        <Root level="all">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="RollingFile1"/>
+            <AppenderRef ref="RollingFile2"/>
+            <AppenderRef ref="RollingFile3"/>
+            <AppenderRef ref="RollingFile4_Curfew"/>
+
+        </Root>
+        <Logger name="pkg.Main" additivity="true">
+            <AppenderRef ref="Console"/>
+
+        </Logger>
+    </Loggers>
+</Configuration>
